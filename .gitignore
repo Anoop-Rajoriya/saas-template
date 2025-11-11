@@ -44,3 +44,6 @@ next-env.d.ts
 
 /app/generated/prisma
 dev/editor.excalidraw
+
+# clerk configuration (can include secrets)
+/.clerk/
