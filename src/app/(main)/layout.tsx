@@ -1,4 +1,5 @@
 import Container from "@/components/Container";
+import Header from "@/components/Header";
 import React from "react";
 
 type Props = {
@@ -6,7 +7,12 @@ type Props = {
 };
 
 function MainLayout({ children }: Props) {
-  return <Container>{children}</Container>;
+  return (
+    <Container>
+      <Header />
+      {children}
+    </Container>
+  );
 }
 
 export default MainLayout;
