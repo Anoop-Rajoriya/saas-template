@@ -1,7 +1,5 @@
-import React from "react";
-
 function Dashboard() {
-  return <div className="flex-1">Dashboard</div>;
+  return <div className="grid grid-cols-1 lg:grid-cols-3 gap-8"></div>;
 }
 
 export default Dashboard;

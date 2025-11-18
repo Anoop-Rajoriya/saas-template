@@ -1,5 +1,5 @@
-import Container from "@/components/Container";
-import Header from "@/components/Header";
+import Container from "@/components/layout/Container";
+import Header from "@/components/layout/Header";
 import React from "react";
 
 type Props = {
