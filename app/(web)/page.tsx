@@ -1,46 +1,39 @@
-import React from "react";
 import { Container, Logo } from "@/components";
 import Link from "next/link";
-import Image from "next/image";
 
 function page() {
   return (
-    <Container>
-      <div className="w-full max-w-3xl mx-auto px-4 py-8 space-y-16">
-        <nav className="flex items-center justify-between">
-          <Logo>Todo</Logo>
+    <Container showBg={true}>
+      <nav className="flex items-center justify-between">
+        <Logo>Todo</Logo>
+        <Link href="/login" className="hover:text-bright-blue transition-color">
+          Login
+        </Link>
+      </nav>
+      <div className="space-y-8">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center px-6 md:px-8 leading-12">
+          <span className="text-transparent bg-clip-text bg-check-gradient">
+            Next.js Todo
+          </span>{" "}
+          Full-Stack Experience
+        </h1>
+        <h2 className="text-center text-lg font-semibold text-text-muted px-4">
+          A full-stack task manager engineered with Next.js. Featuring secure
+          Authentication, Role-Based Access, and Pro Subscriptions.
+        </h2>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
           <Link
-            href="/login"
-            className="hover:text-bright-blue transition-color"
+            href="/home"
+            className="w-full text-center sm:w-auto px-8 py-4 bg-check-gradient text-white font-bold hover:opacity-90 transition-opacity rounded-md"
           >
-            Login
+            Get Free Demo
           </Link>
-        </nav>
-        <div className="space-y-8">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-center px-6 md:px-8 leading-12">
-            <span className="text-transparent bg-clip-text bg-check-gradient">
-              Next.js Todo
-            </span>{" "}
-            Full-Stack Experience
-          </h1>
-          <h2 className="text-center text-lg font-semibold text-text-muted px-4">
-            A full-stack task manager engineered with Next.js. Featuring secure
-            Authentication, Role-Based Access, and Pro Subscriptions.
-          </h2>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-            <Link
-              href="/home"
-              className="w-full text-center sm:w-auto px-8 py-4 bg-check-gradient text-white font-bold hover:opacity-90 transition-opacity rounded-md"
-            >
-              Get Free Demo
-            </Link>
-            <Link
-              href=""
-              className="w-full text-center sm:w-auto px-8 py-4 bg-card-bg font-bold border-2 border-border-main rounded-md"
-            >
-              View Source Code
-            </Link>
-          </div>
+          <Link
+            href=""
+            className="w-full text-center sm:w-auto px-8 py-4 bg-card-bg font-bold border-2 border-border-main rounded-md"
+          >
+            View Source Code
+          </Link>
         </div>
       </div>
     </Container>
