@@ -1,12 +1,50 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware();
+const isPublicRoutes = createRouteMatcher([
+  "/",
+  "/sign-up",
+  "/sign-in",
+  "/recovery",
+  "/api/public(.*)",
+]);
+
+const isUserRoutes = createRouteMatcher(["/user(.*)"]);
+const isAdminRoutes = createRouteMatcher(["/admin(.*)"]);
+
+export default clerkMiddleware(async function (auth, req) {
+  const { userId, sessionClaims, redirectToSignIn } = await auth();
+  const isAuthenticated = userId ? true : false;
+  const role = sessionClaims?.metadata?.role;
+  if (!isAuthenticated && !isPublicRoutes(req)) {
+    // block accessing protected routes for unauthonticated users
+    return redirectToSignIn({ returnBackUrl: req.url });
+  }
+
+  if (isAuthenticated) {
+    if (isPublicRoutes(req)) {
+      // block accessing public routes for authenticated users
+      if (role === "admin") {
+        return NextResponse.redirect(new URL("/admin/home", req.url));
+      } else {
+        return NextResponse.redirect(new URL("/user/home", req.url));
+      }
+    }
+
+    if (isUserRoutes(req) && role === "admin") {
+      // block user routes for admins
+      return NextResponse.redirect(new URL("/admin/home", req.url));
+    }
+
+    if (isAdminRoutes(req) && role !== "admin") {
+      // block admin routes for users
+      return NextResponse.redirect(new URL("/user/home", req.url));
+    }
+  }
+
+  return NextResponse.next();
+});
 
 export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

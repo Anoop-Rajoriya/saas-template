@@ -3,10 +3,13 @@ import Link from "next/link";
 
 function page() {
   return (
-    <Container showBg={true}>
+    <Container showBg={true} className="space-y-16">
       <nav className="flex items-center justify-between">
         <Logo>Todo</Logo>
-        <Link href="/login" className="hover:text-bright-blue transition-color">
+        <Link
+          href="/sign-in"
+          className="hover:text-bright-blue transition-color"
+        >
           Login
         </Link>
       </nav>

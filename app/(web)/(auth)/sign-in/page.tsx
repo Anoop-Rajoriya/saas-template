@@ -2,7 +2,7 @@ import { Container } from "@/components";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 
-function Signup() {
+function SignIn() {
   return (
     <Container>
       <div>
@@ -16,21 +16,21 @@ function Signup() {
         <div className="pt-6 space-y-4">
           <div>
             <h1 className="text-center text-2xl md:text-3xl font-bold">
-              Create Your Account
+              Welcome Back
             </h1>
             <h2 className="text-center text-text-muted text-lg font-light">
-              Start your live demonstrate of next.js todo saas template
+              Enter your credentials to access your account
             </h2>
           </div>
-          {/* <SignupForm/> */}
+          {/* <SignInForm/> */}
           <div>
             <p className="text-center text-text-muted">
-              Already have an account?{" "}
+              don't have an account?{" "}
               <Link
-                href={"/login"}
+                href={"/sign-up"}
                 className="text-bright-blue hover:opacity-90"
               >
-                Login
+                Sign Up
               </Link>
             </p>
           </div>
@@ -40,4 +40,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignIn;
