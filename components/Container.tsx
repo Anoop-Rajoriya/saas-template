@@ -3,9 +3,10 @@ import React from "react";
 type Props = {
   children: React.ReactNode;
   showBg?: boolean;
+  className?: string;
 };
 
-function Container({ children, showBg = false }: Props) {
+function Container({ children, showBg = false, className = "" }: Props) {
   return (
     <div className="min-h-screen bg-app-bg text-text-main font-josefin relative">
       {showBg && (
@@ -19,7 +20,9 @@ function Container({ children, showBg = false }: Props) {
           ></div>
         </div>
       )}
-      <main className="relative z-10 container w-full max-w-3xl mx-auto px-4 py-8 space-y-16">
+      <main
+        className={`relative z-10 container w-full max-w-3xl mx-auto px-4 py-8 ${className}`}
+      >
         {children}
       </main>
     </div>
