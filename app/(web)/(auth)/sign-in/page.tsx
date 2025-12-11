@@ -30,15 +30,20 @@ function SingInPage() {
 
   return (
     <div className="max-w-sm w-full mx-auto space-y-6">
-      <h1 className="fieldset-legend flex justify-center text-2xl md:text-3xl">
-        WelCome Back
-      </h1>
+      <div className="space-y-2">
+        <h1 className="text-center text-xl md:text-2xl font-bold">
+          Welcome Back
+        </h1>
+        <h2 className="text-center font-medium text-text-muted">
+          Sign in to revisite your Next.js Todo Saas Template demo.
+        </h2>
+      </div>
       {/* Sign Up Form */}
       <Form
         onSubmit={handleLogin}
         isLoading={isLoading}
         error={formError}
-        initialLable="Sign Up"
+        initialLable="Sign In"
         loadingLable="Processing..."
       >
         <Input

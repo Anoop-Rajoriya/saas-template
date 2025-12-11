@@ -1,9 +1,11 @@
 "use client";
-import { Form, Input } from "@/components";
-import { useSignUp } from "@clerk/nextjs";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import React, { useState } from "react";
+import { useSignUp } from "@clerk/nextjs";
+import { PenBoxIcon, PenIcon } from "lucide-react";
+import { Form, Input } from "@/components";
+import { useTimer } from "@/hooks";
 
 type Errors = {
   emailAddress?: string;
@@ -14,8 +16,10 @@ type Errors = {
 function SignUpPage() {
   const { isLoaded, setActive, signUp } = useSignUp();
   const router = useRouter();
-  const [verifing, setVerifing] = useState(false);
+  const { timeLeft, startTimer, isTimerActive } = useTimer(30);
+  const [verifing, setVerifing] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [updateEmail, setUpdateEmail] = useState(false);
   const [formError, setFormError] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -29,17 +33,37 @@ function SignUpPage() {
       </div>
     );
 
-  function handleVerification() {}
   function handleSignUp() {}
-  function handleResendCode() {}
-  function handleRefreshPage() {}
+  function handleVerification() {}
+  function handleErrors() {}
+  function handleResendCode() {
+    startTimer();
+  }
+  function handleChangeEmail() {
+    setFormError("");
+    setErrors({});
+    setUpdateEmail(true);
+    setVerifing(false);
+  }
 
   if (verifing) {
     return (
       <div className="max-w-sm w-full mx-auto space-y-6">
-        <h1 className="flex justify-center text-2xl md:text-3xl font-bold ">
-          Verify Your Account
-        </h1>
+        <div className="space-y-2">
+          <h1 className=" text-center text-xl md:text-2xl font-bold">
+            Verify Your Email
+          </h1>
+          <h2 className="font-medium text-text-muted flex items-center justify-center gap-2">
+            Enter the verification code sent to your email {emailAddress}{" "}
+            <button
+              onClick={handleChangeEmail}
+              title="Change email address"
+              className=" size-4 text-bright-blue hover:text-bright-blue/80 active:text-bright-blue cursor-pointer"
+            >
+              <PenBoxIcon className="size-full" />
+            </button>
+          </h2>
+        </div>
         {/* Verification Form */}
         <Form
           onSubmit={handleVerification}
@@ -58,31 +82,31 @@ function SignUpPage() {
             onChange={setCode}
           />
         </Form>
-        <p className="text-text-muted text-sm text-center">
-          Want to change email address{" "}
-          <button
-            onClick={handleRefreshPage}
-            className="text-bright-blue hover:text-bright-blue/90 active:text-bright-blue cursor-pointer"
-          >
-            refresh page
-          </button>
-          . If verification code expired{" "}
-          <button
-            onClick={handleResendCode}
-            className="text-bright-blue hover:text-bright-blue/80 active:text-bright-blue cursor-pointer"
-          >
-            resend code
-          </button>
-        </p>
+        <button
+          onClick={handleResendCode}
+          disabled={isTimerActive}
+          className="btn btn-link no-underline text-center w-full"
+        >
+          Didn't receive a code? Resend{" "}
+          {isTimerActive && (
+            <span className="font-mono font-bold">{timeLeft}s</span>
+          )}
+        </button>
       </div>
     );
   }
 
   return (
     <div className="max-w-sm w-full mx-auto space-y-6">
-      <h1 className="flex justify-center text-2xl md:text-3xl font-bold">
-        Create Your Account
-      </h1>
+      <div className="space-y-2">
+        <h1 className="text-center text-xl md:text-2xl font-bold">
+          Create Your Account
+        </h1>
+        <h2 className="font-medium text-text-muted text-center">
+          Complete to get start your live demo of Next.js Todo Saas Template
+          demo.
+        </h2>
+      </div>
       {/* Sign In Form */}
       <Form
         onSubmit={handleSignUp}
