@@ -3,7 +3,7 @@ import { AlertCircleIcon } from "lucide-react";
 import { ComponentProps, FormEvent } from "react";
 
 interface FormProps extends Omit<ComponentProps<"form">, "onSubmit"> {
-  onSubmit: () => void | Promise<void>;
+  onSubmit: () => void;
   isLoading: boolean;
   loadingLable?: string;
   initialLable?: string;

@@ -20,7 +20,11 @@ function parsedClerkErrors(err: any): ParsedErrors {
     const shortMessage = error.message;
     const longMessage = error.longMessage;
 
-    if (param === "identifier" || code === "form_identifier_not_found") {
+    if (
+      param === "identifier" ||
+      param === "email_address" ||
+      code === "form_identifier_not_found"
+    ) {
       errors.fieldErrors.emailAddress = shortMessage;
     } else if (param === "password" || code === "form_password_incorrect") {
       errors.fieldErrors.password = shortMessage;

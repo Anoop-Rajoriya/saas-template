@@ -6,6 +6,8 @@ import { useSignUp } from "@clerk/nextjs";
 import { PenBoxIcon, PenIcon } from "lucide-react";
 import { Form, Input } from "@/components";
 import { useTimer } from "@/hooks";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import { parsedClerkErrors } from "@/lib/utils.client";
 
 type Errors = {
   emailAddress?: string;
@@ -33,11 +35,87 @@ function SignUpPage() {
       </div>
     );
 
-  function handleSignUp() {}
-  function handleVerification() {}
-  function handleErrors() {}
-  function handleResendCode() {
+  async function handleSignUp() {
+    if (!isLoaded) return null;
+    setFormError("");
+    setErrors({});
+    setIsLoading(true);
+    try {
+      if (updateEmail) {
+        await signUp.update({
+          emailAddress,
+          password,
+        });
+      } else {
+        await signUp.create({
+          emailAddress,
+          password,
+        });
+      }
+
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      startTimer();
+      setVerifing(true);
+    } catch (error: any) {
+      // console.error(JSON.stringify(error, null, 2));
+      if (isClerkAPIResponseError(error)) {
+        const { fieldErrors, formError } = parsedClerkErrors(error);
+        setFormError(formError || "");
+        setErrors(fieldErrors);
+      } else {
+        setFormError(error.message || "Unexpacted sing up error");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  async function handleVerification() {
+    if (!isLoaded) return;
+    setFormError("");
+    setErrors({});
+    setIsLoading(true);
+    try {
+      const verificationAttempt = await signUp.attemptEmailAddressVerification({
+        code,
+      });
+
+      if (verificationAttempt.status === "complete") {
+        await setActive({ session: verificationAttempt.createdSessionId });
+        router.push("/user");
+      } else {
+        // console.error("Verification attempat failed :", verificationAttempt.status)
+        throw new Error("Email varification failed. Retry after some time.");
+      }
+    } catch (error: any) {
+      if (isClerkAPIResponseError(error)) {
+        const { fieldErrors, formError } = parsedClerkErrors(error);
+        setFormError(formError || "");
+        setErrors(fieldErrors);
+      } else {
+        setFormError(error.message || "Unexpacted email verificatino error.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  async function handleResendCode() {
+    if (!isLoaded) return null;
     startTimer();
+    setFormError("");
+    setErrors({});
+    try {
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+    } catch (error: any) {
+      if (isClerkAPIResponseError(error)) {
+        const { fieldErrors, formError } = parsedClerkErrors(error);
+        setFormError(formError || "");
+        setErrors(fieldErrors);
+      } else {
+        setFormError(
+          error.message || "Unexpacted verification code resend error."
+        );
+      }
+    }
   }
   function handleChangeEmail() {
     setFormError("");
@@ -53,12 +131,13 @@ function SignUpPage() {
           <h1 className=" text-center text-xl md:text-2xl font-bold">
             Verify Your Email
           </h1>
-          <h2 className="font-medium text-text-muted flex items-center justify-center gap-2">
-            Enter the verification code sent to your email {emailAddress}{" "}
+          <h2 className="font-medium text-text-muted text-center">
+            Enter the verification code sent to your email{" "}
+            <span className="font-bold text-bright-blue">{emailAddress}</span>{" "}
             <button
               onClick={handleChangeEmail}
               title="Change email address"
-              className=" size-4 text-bright-blue hover:text-bright-blue/80 active:text-bright-blue cursor-pointer"
+              className="size-4 text-bright-blue hover:text-bright-blue/80 active:text-bright-blue cursor-pointer"
             >
               <PenBoxIcon className="size-full" />
             </button>
@@ -134,6 +213,10 @@ function SignUpPage() {
           validationMessage="Password is required."
           onChange={setPassword}
         />
+        <div
+          id="clerk-captcha"
+          className="flex items-center justify-center"
+        ></div>
       </Form>
       <p className="text-text-muted text-sm text-center">
         Have an account?{" "}
