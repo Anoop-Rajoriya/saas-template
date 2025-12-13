@@ -1,7 +1,7 @@
 import { Container, Logo } from "@/components";
 import Link from "next/link";
 
-function page() {
+function LandingPage() {
   return (
     <Container showBg={true} className="space-y-16">
       <nav className="flex items-center justify-between">
@@ -43,7 +43,7 @@ function page() {
   );
 }
 
-export default page;
+export default LandingPage;
 
 // "use client";
 

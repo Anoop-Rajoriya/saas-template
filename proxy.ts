@@ -9,8 +9,8 @@ const isPublicRoutes = createRouteMatcher([
   "/api/public(.*)",
 ]);
 
-const isUserRoutes = createRouteMatcher(["/user(.*)"]);
-const isAdminRoutes = createRouteMatcher(["/admin(.*)"]);
+const isUserRoutes = createRouteMatcher(["/user", "/user(.*)"]);
+const isAdminRoutes = createRouteMatcher(["/admin", "/admin(.*)"]);
 
 export default clerkMiddleware(async function (auth, req) {
   const { userId, sessionClaims, redirectToSignIn } = await auth();
