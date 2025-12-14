@@ -23,7 +23,7 @@ function ToggleTheme() {
       onClick={toggleTheme}
       aria-label="Toggle Theme"
       // Optional: Add a hover/active effect for better UX
-      className="hover:opacity-80 transition-opacity"
+      className="hover:opacity-80 transition-opacity cursor-pointer size-7 inline-flex items-center justify-center"
     >
       {resolvedTheme === "dark" ? (
         <Image
@@ -33,12 +33,14 @@ function ToggleTheme() {
           height={26}
         />
       ) : (
+        // <SunIcon />
         <Image
           src="/icons/icon-moon.svg"
           alt="Switch to dark mode"
           width={26}
           height={26}
         />
+        // <MoonIcon />
       )}
     </button>
   );

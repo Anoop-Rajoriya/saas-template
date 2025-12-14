@@ -1,53 +1,50 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Checkbox from "./Checkbox";
 
 export type Todo = {
   id: string;
   title: string;
   completed: boolean;
 };
+export type NewTodo = Omit<Todo, "id">;
 
 type TodoFormProps = {
-  val?: Todo;
-  onSubmit: (val: Todo) => void;
+  value?: Todo;
+  onSubmit: (val: NewTodo) => void | Promise<void>;
 };
 
-type CheckboxProps = {
-  checked: boolean;
-  onChange: (completed: boolean) => void;
+const EMPTY_TODO: NewTodo = {
+  title: "",
+  completed: false,
 };
 
-type TodoItemProps = {
-  todo: Todo;
-  onDelete: (id: string) => void;
-  onComplete: (id: string, completed: boolean) => void;
-  className?: string;
-};
+function TodoForm({ value, onSubmit }: TodoFormProps) {
+  const [todo, setTodo] = useState<NewTodo>(EMPTY_TODO);
 
-function TodoForm({ val, onSubmit }: TodoFormProps) {
-  const [todo, setTodo] = useState<Todo>({
-    id: "",
-    title: "",
-    completed: false,
-  });
+  useEffect(() => {
+    if (value)
+      [
+        setTodo({
+          title: value.title,
+          completed: value.completed,
+        }),
+      ];
+  }, [value]);
 
-  const handleSubmit = function (e: React.FormEvent) {
+  const handleSubmit = async function (e: React.FormEvent) {
     e.preventDefault();
-    if (!todo.title || !todo.title.trim()) return;
-    onSubmit(todo);
-    setTodo({
-      id: "",
-      title: "",
-      completed: false,
-    });
+    if (!todo.title.trim()) return;
+    await onSubmit(todo);
+    setTodo(EMPTY_TODO);
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center justify-center gap-6 px-6 bg-card-bg"
+      className="flex items-center justify-center gap-6 px-6 bg-card-bg border-2 border-border-main rounded-sm"
     >
       <Checkbox
         checked={todo.completed}
@@ -68,20 +65,27 @@ function TodoForm({ val, onSubmit }: TodoFormProps) {
   );
 }
 
-function TodoItem({ todo, onComplete, onDelete, className }: TodoItemProps) {
+type TodoItemProps = {
+  todo: Todo;
+  onToggle: (id: string, completed: boolean) => void;
+  onDelete: (id: string) => void;
+  className?: string;
+};
+
+function TodoItem({ todo, onToggle, onDelete, className = "" }: TodoItemProps) {
   return (
     <li
       data-id={todo.id}
-      className={`flex items-center justify-center gap-6 px-6 group ${className}`}
+      className={`flex items-center gap-6 px-6 group ${className}`}
     >
       <Checkbox
         checked={todo.completed}
         onChange={(completed) => {
-          onComplete(todo.id, completed);
+          onToggle(todo.id, completed);
         }}
       />
       <p
-        className={`flex-1 py-4 font-semibold ${
+        className={`flex-1 py-4 font-semibold min-w-0 wrap-break-word ${
           todo.completed ? "line-through text-text-muted" : ""
         }`}
       >
@@ -100,26 +104,6 @@ function TodoItem({ todo, onComplete, onDelete, className }: TodoItemProps) {
         />
       </button>
     </li>
-  );
-}
-
-function Checkbox({ checked, onChange }: CheckboxProps) {
-  return (
-    <label className="inline-flex size-5 md:size-6 rounded-full has-checked:bg-check-gradient border border-border-main relative items-center justify-center">
-      <input
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-        type="checkbox"
-        className="absolute opacity-0 peer"
-      />
-      <Image
-        className="peer-checked:inline-block hidden size-auto"
-        src={"/icons/icon-check.svg"}
-        alt="check icon"
-        width={16}
-        height={16}
-      />
-    </label>
   );
 }
 
