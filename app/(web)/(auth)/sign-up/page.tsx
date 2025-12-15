@@ -36,7 +36,7 @@ function SignUpPage() {
     );
 
   async function handleSignUp() {
-    if (!isLoaded) return null;
+    if (!isLoaded) return;
     setFormError("");
     setErrors({});
     setIsLoading(true);
