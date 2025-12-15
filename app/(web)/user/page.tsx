@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Todo, NewTodo } from "@/components/types";
 import {
   Container,
@@ -9,6 +9,7 @@ import {
   TodoInput,
   TodoItem,
 } from "@/components";
+import TodoApi from "@/lib/todo.api";
 
 type TabSatate = "all" | "active" | "completed";
 
@@ -17,27 +18,56 @@ function HomePage() {
   const [activeTab, setActiveTab] = useState<TabSatate>("all");
   const [clearing, setClearing] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    TodoApi.list()
+      .then((data: any) => {
+        setTodos(data.todos);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
   async function handleAdd(todo: NewTodo) {
-    // temprorary because db handle id embadding
-    const newTodo = { ...todo, id: (todos.length * 100 + 1).toString() };
-    setTodos((pre) => [newTodo, ...pre]);
+    const response: any = await TodoApi.add(todo);
+    console.log(response);
+    setTodos((pre) => [response.todo, ...pre]);
   }
   async function handleToggle(id: string, completed: boolean) {
-    console.log(id, completed);
     setTodos((pre) =>
-      pre.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, completed };
-        } else {
-          return todo;
-        }
-      })
+      pre.map((todo) => (todo.id === id ? { ...todo, completed } : todo))
     );
+    try {
+      await TodoApi.toggle(id, completed);
+    } catch (error) {
+      setTodos((pre) =>
+        pre.map((todo) =>
+          todo.id === id ? { ...todo, completed: !completed } : todo
+        )
+      );
+      console.error(`Todo Toggle error: ${error}`);
+      throw new Error("Toggle failed!");
+    }
   }
+
   async function handleDelete(id: string) {
     setTodos((pre) => pre.filter((todo) => todo.id !== id));
+    await TodoApi.remove(id);
   }
-  async function handleClearCompleted() {}
+
+  async function handleClearCompleted() {
+    setTodos((pre) => pre.filter((todo) => !todo.completed));
+    try {
+      setClearing(true);
+      await TodoApi.clear();
+    } catch (error) {
+      throw error;
+    } finally {
+      setClearing(false);
+    }
+  }
+
   function getTodos(): Todo[] {
     if (activeTab === "active") {
       return todos.filter((todo) => !todo.completed);
@@ -57,6 +87,7 @@ function HomePage() {
       return "no items left";
     }
   };
+
   return (
     <Container showBg>
       <div className="space-y-12">

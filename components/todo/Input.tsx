@@ -22,8 +22,8 @@ function Input({ onSubmit }: Props) {
       setError(null);
       await onSubmit(todo);
       setTodo(EMPTY_TODO);
-    } catch {
-      setError("Could not create todo");
+    } catch (error: any) {
+      setError(error.message || "Could not create todo");
     } finally {
       setLoading(false);
     }
