@@ -20,6 +20,7 @@ enum SubscriptionPlan {
 
 model User {
   id                 String           @id @default(cuid())
+  authId             String           @unique
   email              String           @unique
   name               String?
   role               Role             @default(USER)
