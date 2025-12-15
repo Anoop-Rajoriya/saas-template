@@ -1,14 +1,7 @@
 "use client";
+import { FormEvent } from "react";
 import { AlertCircleIcon } from "lucide-react";
-import { ComponentProps, FormEvent } from "react";
-
-interface FormProps extends Omit<ComponentProps<"form">, "onSubmit"> {
-  onSubmit: () => void;
-  isLoading: boolean;
-  loadingLable?: string;
-  initialLable?: string;
-  error?: string;
-}
+import { AuthForm } from "../types";
 
 function Form({
   onSubmit,
@@ -18,7 +11,7 @@ function Form({
   initialLable = "Submit",
   error = "",
   className = "",
-}: FormProps) {
+}: AuthForm) {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit();

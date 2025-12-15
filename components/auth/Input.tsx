@@ -1,14 +1,7 @@
 "use client";
 import { useState, useEffect, ChangeEvent, ComponentProps } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-
-interface Props extends Omit<ComponentProps<"input">, "onChange"> {
-  label: string;
-  onChange: (value: string) => void;
-  error?: string;
-  value?: string;
-  validationMessage?: string;
-}
+import { AuthInput } from "../types";
 
 function Input({
   id,
@@ -20,7 +13,7 @@ function Input({
   validationMessage = "This field is required",
   type = "text",
   ...props
-}: Props) {
+}: AuthInput) {
   const [visible, setVisible] = useState(false);
   const [err, setErr] = useState(error);
   const [val, setVal] = useState(value);

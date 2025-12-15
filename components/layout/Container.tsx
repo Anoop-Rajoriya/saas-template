@@ -1,10 +1,5 @@
 import React from "react";
-
-type Props = {
-  children: React.ReactNode;
-  showBg?: boolean;
-  className?: string;
-};
+import { Container as Props } from "../types";
 
 function Container({ children, showBg = false, className = "" }: Props) {
   return (

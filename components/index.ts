@@ -1,22 +1,21 @@
-import Container from "./Container";
-import Logo from "./Logo";
-import ToggleTheme from "./ToggleTheme";
-import Form from "./Form";
-import Input from "./Input";
-import Checkbox from "./Checkbox";
-import { TodoForm, TodoItem, Todo, NewTodo } from "./Todo";
-import Logout from "./Logout";
+import Container from "./layout/Container";
+import Logo from "./layout/Logo";
+import ToggleTheme from "./layout/ToggleTheme";
+import Logout from "./layout/Logout";
+import Input from "./auth/Input";
+import Form from "./auth/Form";
+import TodoInput from "./todo/Input";
+import TodoItem from "./todo/Item";
+import Check from "./todo/Check";
 
 export {
   Container,
   Logo,
   ToggleTheme,
+  Logout,
   Form,
   Input,
-  Checkbox,
-  TodoForm,
+  Check,
+  TodoInput,
   TodoItem,
-  Logout,
 };
-
-export type { Todo, NewTodo };

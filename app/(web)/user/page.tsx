@@ -1,33 +1,28 @@
 "use client";
 import React, { useState } from "react";
+import { Todo, NewTodo } from "@/components/types";
 import {
   Container,
   Logo,
   Logout,
-  NewTodo,
-  Todo,
-  TodoForm,
-  TodoItem,
   ToggleTheme,
+  TodoInput,
+  TodoItem,
 } from "@/components";
-import { LogOutIcon } from "lucide-react";
-
-const MOCK_TODOS = [
-  { id: "101", title: "Print hello world", completed: false },
-  { id: "102", title: "Say good morning", completed: true },
-];
 
 type TabSatate = "all" | "active" | "completed";
 
 function HomePage() {
-  const [todos, setTodos] = useState<Todo[]>(MOCK_TODOS);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [activeTab, setActiveTab] = useState<TabSatate>("all");
-  function handleAdd(todo: NewTodo) {
+  const [clearing, setClearing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  async function handleAdd(todo: NewTodo) {
     // temprorary because db handle id embadding
     const newTodo = { ...todo, id: (todos.length * 100 + 1).toString() };
     setTodos((pre) => [newTodo, ...pre]);
   }
-  function handleToggle(id: string, completed: boolean) {
+  async function handleToggle(id: string, completed: boolean) {
     console.log(id, completed);
     setTodos((pre) =>
       pre.map((todo) => {
@@ -39,10 +34,10 @@ function HomePage() {
       })
     );
   }
-  function handleDelete(id: string) {
+  async function handleDelete(id: string) {
     setTodos((pre) => pre.filter((todo) => todo.id !== id));
   }
-  function handleClearCompleted() {}
+  async function handleClearCompleted() {}
   function getTodos(): Todo[] {
     if (activeTab === "active") {
       return todos.filter((todo) => !todo.completed);
@@ -73,10 +68,14 @@ function HomePage() {
           </nav>
         </header>
         <div className="space-y-4">
-          <TodoForm onSubmit={handleAdd} />
+          <TodoInput onSubmit={handleAdd} />
           <div className="bg-card-bg border-border-main border-2 rounded-sm">
             <ul>
-              {todos.length > 0 ? (
+              {loading ? (
+                <p className="p-4 text-center text-text-muted font-semibold">
+                  loading todos...
+                </p>
+              ) : getTodos().length > 0 ? (
                 getTodos().map((todo) => (
                   <TodoItem
                     key={todo.id}
@@ -87,7 +86,7 @@ function HomePage() {
                   />
                 ))
               ) : (
-                <p className="p-4 text-center text-text-muted border-b-2 border-border-main font-semibold">
+                <p className="p-4 text-center text-text-muted font-semibold">
                   no items found!
                 </p>
               )}
@@ -127,9 +126,14 @@ function HomePage() {
               </div>
               <button
                 onClick={handleClearCompleted}
-                className="text-text-muted hover:text-bright-blue active:text-text-main cursor-pointer transition-colors ease-in-out duration-100"
+                disabled={clearing}
+                className={`text-text-muted ${
+                  clearing
+                    ? "cursor-not-allowed"
+                    : "hover:text-bright-blue active:text-text-main cursor-pointer"
+                }`}
               >
-                Clear Completed
+                {clearing ? "Clearing..." : "Clear Completed"}
               </button>
             </div>
           </div>
