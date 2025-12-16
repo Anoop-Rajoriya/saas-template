@@ -32,7 +32,7 @@ function HomePage() {
   async function handleAdd(todo: NewTodo) {
     const response: any = await TodoApi.add(todo);
     console.log(response);
-    setTodos((pre) => [response.todo, ...pre]);
+    setTodos((pre) => [response.newTodo, ...pre]);
   }
   async function handleToggle(id: string, completed: boolean) {
     setTodos((pre) =>
