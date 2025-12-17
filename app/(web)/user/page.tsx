@@ -22,9 +22,7 @@ function HomePage() {
   useEffect(() => {
     setLoading(true);
     TodoApi.list()
-      .then((data: any) => {
-        setTodos(data.todos);
-      })
+      .then((data: any) => setTodos(data.todos))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);

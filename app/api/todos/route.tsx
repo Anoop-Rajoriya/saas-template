@@ -3,37 +3,45 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  // validate user
+  // validation
   const { userId } = await auth();
   if (!userId)
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
-  // fetch all todos of user
-  const todos = await prisma.todo.findMany({
-    where: {
-      author: { authId: userId },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  // return fetched todos
-  return NextResponse.json({ message: "Todos list.", todos });
+  // database operation
+  try {
+    const todos = await prisma.todo.findMany({
+      where: {
+        author: { authId: userId },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    // success
+    return NextResponse.json({
+      message: "Todo list.",
+      todos,
+    });
+  } catch (error) {
+    console.error("failed to fetch todo list: ", error);
+    return NextResponse.json("Listing todos failed.", { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
-  // validate user
+  // validation
   const { userId } = await auth();
+  const { title, completed } = await req.json();
+
   if (!userId)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  // validate todo formate
-  const { title, completed } = await req.json();
-  if (!title.trim() || typeof completed !== "boolean") {
+  else if (!title.trim() || typeof completed !== "boolean") {
     return NextResponse.json(
-      { message: "Following fields are required (title, completed)." },
+      { message: "Required fileds not found (title, completed)." },
       { status: 422 }
     );
   }
-  // add to in db
+  // database operation
   try {
     const newTodo = await prisma.todo.create({
       data: {
@@ -46,12 +54,16 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-    // return added todo
-    return NextResponse.json({ message: "New Todo", newTodo });
+    // success
+    return NextResponse.json({
+      message: "Todo successfully added.",
+      newTodo,
+    });
   } catch (error) {
+    console.error("Failed to add todo: ", error);
     return NextResponse.json(
-      { message: "Failed to add new todo." },
-      { status: 400 }
+      { message: "Add new todo failed." },
+      { status: 500 }
     );
   }
 }
