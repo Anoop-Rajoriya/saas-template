@@ -17,10 +17,19 @@ export async function GET() {
         createdAt: "desc",
       },
     });
+
+    const subscription = await prisma.user.findUnique({
+      where: { authId: userId },
+      select: { subscriptionExpiry: true, subscriptionPlan: true },
+    });
     // success
     return NextResponse.json({
       message: "Todo list.",
       todos,
+      subscriptionPlan: subscription?.subscriptionPlan.toLowerCase() || "free",
+      isExpired: subscription?.subscriptionExpiry
+        ? new Date() > subscription.subscriptionExpiry
+        : false,
     });
   } catch (error) {
     console.error("failed to fetch todo list: ", error);

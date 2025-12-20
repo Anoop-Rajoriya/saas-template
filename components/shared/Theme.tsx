@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 
-function ToggleTheme() {
+function Theme() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const onChange = function () {};
@@ -45,5 +45,4 @@ function ToggleTheme() {
     </button>
   );
 }
-
-export default ToggleTheme;
+export default Theme;

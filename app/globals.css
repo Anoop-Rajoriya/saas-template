@@ -4,28 +4,22 @@
 :root {
   --background-img-mobile: url("/bgs/bg-mobile-light.jpg");
   --background-img-desktop: url("/bgs/bg-desktop-light.jpg");
-  --app-bg: hsl(0, 0%, 98%); /* Gray 50 */
-  --card-bg: hsl(0, 0%, 100%); /* White */
-  --text-main: hsl(235, 19%, 35%); /* Navy 850 */
-  --text-muted: hsl(236, 9%, 61%); /* Gray 600 */
+  --app: hsl(0, 0%, 98%); /* Gray 50 */
+  --card: hsl(0, 0%, 100%); /* White */
+  --main: hsl(235, 19%, 35%); /* Navy 850 */
+  --muted: hsl(236, 9%, 61%); /* Gray 600 */
   --border-color: hsl(233, 11%, 84%); /* Gray 300 */
 }
 
 [data-theme="dark"] {
-  --background-img-mobile: url("/bgs/bg-mobile-dark.jpg");
-  --background-img-desktop: url("/bgs/bg-desktop-dark.jpg");
-
-  --app-bg: hsl(235, 21%, 11%); /* Navy 950 */
-  --card-bg: hsl(235, 24%, 19%); /* Navy 900 */
-  --text-main: hsl(234, 39%, 85%); /* Purple 300 */
-  --text-muted: hsl(233, 14%, 35%); /* Purple 700 */
+  --app: hsl(235, 21%, 11%); /* Navy 950 */
+  --card: hsl(235, 24%, 19%); /* Navy 900 */
+  --main: hsl(234, 39%, 85%); /* Purple 300 */
+  --muted: hsl(233, 14%, 35%); /* Purple 700 */
   --border-color: hsl(237, 14%, 26%); /* Purple 800 */
 }
 
 @theme {
-  --background-image-mobile: var(--background-img-mobile);
-  --background-image-desktop: var(--background-img-desktop);
-
   --color-bright-blue: hsl(220, 98%, 61%);
 
   --color-gray-50: hsl(0, 0%, 98%);
@@ -43,12 +37,12 @@
   --color-purple-800: hsl(237, 14%, 26%);
 
   /* Use these for main layout elements */
-  --color-app-bg: var(--app-bg); /* Switches Gray 50 -> Navy 950 */
-  --color-card-bg: var(--card-bg); /* Switches White -> Navy 900 */
-  --color-text-main: var(--text-main);
-  --color-text-muted: var(--text-muted);
+  --color-app: var(--app); /* Switches Gray 50 -> Navy 950 */
+  --color-card: var(--card); /* Switches White -> Navy 900 */
+  --color-main: var(--main);
+  --color-muted: var(--muted);
   --color-border-main: var(--border-color);
-  --background-image-check-gradient: linear-gradient(
+  --background-image-custom-gradient: linear-gradient(
     135deg,
     hsl(192, 100%, 67%),
     hsl(280, 87%, 65%)
