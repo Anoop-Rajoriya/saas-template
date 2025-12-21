@@ -25,7 +25,7 @@ function BG({
   images?: Images;
 }) {
   return (
-    <div className="min-h-screen w-full bg-app relative overflow-hidden">
+    <div className="min-h-screen w-full relative overflow-hidden">
       <div
         id="background"
         className="absolute left-0 right-0 top-0 min-h-1/2 opacity-80"

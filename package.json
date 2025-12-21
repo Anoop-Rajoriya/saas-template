@@ -13,6 +13,7 @@
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
     "axios": "^1.13.2",
+    "clsx": "^2.1.1",
     "daisyui": "^5.5.5",
     "dotenv": "^17.2.3",
     "lucide-react": "^0.555.0",

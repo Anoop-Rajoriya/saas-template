@@ -1,40 +1,47 @@
-import React from "react";
+import clsx from "clsx";
+import { ReactNode } from "react";
+import Button from "./Button";
+import { CheckCircleIcon, InfoIcon } from "lucide-react";
+
+type AlertType = "success" | "error" | "warning" | "info";
 
 type Props = {
-  type: "info" | "success" | "warning" | "error";
-  title: string;
+  type: AlertType;
+  message: string;
   description?: string;
-  action: string;
-  onAction: () => void;
+  action?: ReactNode;
+  onAction?: () => void;
 };
 
-function Alert({
-  type = "info", // info | success | warning | error
-  title,
+export default function Alert({
+  type,
+  message,
   description,
   action,
   onAction,
 }: Props) {
-  const typeClassMap = {
-    info: "alert-info",
+  const typeClasses: Record<AlertType, string> = {
     success: "alert-success",
-    warning: "alert-warning",
     error: "alert-error",
+    warning: "alert-warning",
+    info: "alert-info",
   };
+
   return (
     <div
       role="alert"
-      className={`alert ${typeClassMap[type]} bg-card-bg border border-border-main rounded-xl`}
+      className={clsx(
+        "alert alert-vertical md:alert-horizontal",
+        typeClasses[type]
+      )}
     >
-      <div className="flex flex-col gap-1">
-        {title && <h4 className="font-semibold">{title}</h4>}
-        {description && (
-          <p className="text-sm text-base-content/80">{description}</p>
-        )}
+      {type === "success" && <CheckCircleIcon />}
+      {type === "info" && <InfoIcon />}
+      <div>
+        <h3 className="font-bold">{message}</h3>
+        {description && <div className="text-xs">{description}</div>}
       </div>
-      {action && <div onClick={onAction}>{action}</div>}
+      {action && <Button onClick={onAction}>{action}</Button>}
     </div>
   );
 }
-
-export default Alert;

@@ -1,3 +1,5 @@
+"use client";
+
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
@@ -75,7 +77,7 @@ function Input({
           </button>
         )}
       </div>
-      {err && <span>{err}</span>}
+      {err && <span className="text-error">{err}</span>}
     </label>
   );
 }

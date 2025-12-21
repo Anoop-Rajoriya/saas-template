@@ -1,52 +1,74 @@
-import React from "react";
+import clsx from "clsx";
+import Link from "next/link";
+import { ReactNode, ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
 
-type Variant = "gradient" | "primary" | "secondary" | "danger" | "link";
+type Variant = "primary" | "secondary" | "accent" | "link";
 
-type Props = {
-  onClick?: () => void;
-  isLoading?: boolean;
-  loadingText?: string;
-  disabled?: boolean;
-  children: React.ReactNode;
-  type?: "button" | "submit" | "reset";
+type CommonProps = {
+  children: ReactNode;
   variant?: Variant;
-  className?: string; // Added for flexibility
+  loading?: boolean;
+  disabled?: boolean;
+  className?: string;
 };
 
-function Button({
-  onClick,
-  children,
-  disabled = false,
-  isLoading = false,
-  loadingText = "Loading...",
-  type = "button",
-  variant = "primary",
-  className,
-}: Props) {
-  const varientClasses: Record<Variant, string> = {
-    gradient: "bg-custom-gradient text-white",
-    primary: "bg-bright-blue text-white",
-    secondary: "bg-card text-white",
-    danger: "bg-red-600 text-white",
-    link: "text-bright-blue underline",
+type ButtonProps = CommonProps &
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    href?: never;
   };
+
+type LinkProps = CommonProps &
+  AnchorHTMLAttributes<HTMLAnchorElement> & {
+    href: string;
+  };
+
+type Props = ButtonProps | LinkProps;
+
+export default function Button({
+  children,
+  variant = "primary",
+  href,
+  loading = false,
+  disabled = false,
+  className,
+  ...props
+}: Props) {
+  const variantClasses: Record<Variant, string> = {
+    primary: "bg-bright-blue text-white",
+    secondary: "bg-card text-main",
+    accent: "bg-custom-gradient text-white",
+    link: "btn-link no-underline text-main hover:underline px-0.5",
+  };
+
+  const baseClasses = clsx(
+    "btn disabled:opacity-60 disabled:cursor-not-allowed",
+    variant !== "link" && "hover:opacity-80 active:opacity-100",
+    variantClasses[variant],
+    className
+  );
+
+  // Link button
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={baseClasses}
+        aria-disabled={loading}
+        {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {children}
+      </Link>
+    );
+  }
+
+  // Normal / form button
   return (
     <button
-      type={type}
-      disabled={disabled || isLoading}
-      onClick={onClick}
-      className={`btn ${varientClasses[variant]} ${className}`}
+      className={baseClasses}
+      disabled={disabled || loading}
+      {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
     >
-      {isLoading ? (
-        <>
-          <span className="loading loading-sm"></span>
-          {loadingText}
-        </>
-      ) : (
-        children
-      )}
+      {loading ? <span className="loading loading-spinner" /> : children}
     </button>
   );
 }
-
-export default Button;

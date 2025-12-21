@@ -1,10 +1,4 @@
-import {
-  BG,
-  Button,
-  Container,
-  Logo,
-  SingInLink,
-} from "@/components/components";
+import { BG, Button, Container, Logo, SingInLink } from "@/components";
 import Link from "next/link";
 
 function LandingPage() {
@@ -27,7 +21,7 @@ function LandingPage() {
             Authentication, Role-Based Access, and Pro Subscriptions.
           </h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-            <Button variant="gradient">
+            <Button variant="accent">
               <Link href={"/user"}>Get Free Demo</Link>
             </Button>
             <Button variant="secondary">
