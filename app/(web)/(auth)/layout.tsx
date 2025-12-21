@@ -1,4 +1,4 @@
-import { Container } from "@/components";
+import { Button, Container } from "@/components";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -6,16 +6,11 @@ import React from "react";
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <Container>
-      <div className="flex flex-col gap-8">
-        <Link
-          href={"/"}
-          className="btn btn-link no-underline text-text-muted hover:text-text-main self-start"
-        >
-          <ArrowLeftIcon />
-          Go Back To Home
-        </Link>
-        {children}
-      </div>
+      <Button variant="link">
+        <ArrowLeftIcon className="mr-2 h-4 w-4" />
+        <Link href={"/"}>Back</Link>
+      </Button>
+      {children}
     </Container>
   );
 }

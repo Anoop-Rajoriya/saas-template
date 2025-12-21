@@ -1,16 +1,16 @@
-type ParsedErrors = {
-  fieldErrors: {
-    emailAddress?: string;
-    password?: string;
-    code?: string;
-  };
-  formError?: string;
+export type Errors = {
+  emailAddress?: string;
+  password?: string;
+  name?: string;
+  code?: string;
+  global?: string;
 };
 
-function parsedClerkErrors(err: any): ParsedErrors {
-  const errors: ParsedErrors = { fieldErrors: {} };
+const parseClerkErrors = (err: any) => {
+  const errors: Errors = {};
+
   if (!err || !err.errors || !Array.isArray(err.errors)) {
-    errors.formError = "Something went wrong. Please try again.";
+    errors.global = "Something went wrong. Please try again.";
     return errors;
   }
 
@@ -25,19 +25,19 @@ function parsedClerkErrors(err: any): ParsedErrors {
       param === "email_address" ||
       code === "form_identifier_not_found"
     ) {
-      errors.fieldErrors.emailAddress = shortMessage;
+      errors.emailAddress = shortMessage;
     } else if (param === "password" || code === "form_password_incorrect") {
-      errors.fieldErrors.password = shortMessage;
+      errors.password = shortMessage;
     } else {
-      errors.formError = longMessage || shortMessage;
+      errors.global = longMessage || shortMessage;
     }
 
     if (code === "user_locked") {
-      errors.formError = longMessage;
+      errors.global = longMessage;
     }
   });
 
   return errors;
-}
+};
 
-export { parsedClerkErrors };
+export default parseClerkErrors;
