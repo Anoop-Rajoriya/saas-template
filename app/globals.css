@@ -2,50 +2,56 @@
 @plugin "daisyui";
 
 :root {
-  --background-img-mobile: url("/bgs/bg-mobile-light.jpg");
-  --background-img-desktop: url("/bgs/bg-desktop-light.jpg");
-  --app: hsl(0, 0%, 98%); /* Gray 50 */
-  --card: hsl(0, 0%, 100%); /* White */
-  --main: hsl(235, 19%, 35%); /* Navy 850 */
-  --muted: hsl(236, 9%, 61%); /* Gray 600 */
-  --border-color: hsl(233, 11%, 84%); /* Gray 300 */
+  /* Assets */
+  --background-img-mobile: url("/bgs/mobile-light.jpg");
+  --background-img-desktop: url("/bgs/desktop-light.jpg");
+
+  /* Semantic Colors (Light Mode) */
+  --app-bg: hsl(0, 0%, 98%); /* Was --app */
+  --surface: hsl(0, 0%, 100%); /* Was --card */
+  --txt-primary: hsl(235, 19%, 35%); /* Was --main */
+  --txt-secondary: hsl(236, 9%, 61%); /* Was --muted */
+  --border: hsl(233, 11%, 84%); /* Was --border-color */
+
+  /* Brand/Accent */
+  --brand-blue: hsl(220, 98%, 61%); /* Bright Blue */
 }
 
 [data-theme="dark"] {
-  --app: hsl(235, 21%, 11%); /* Navy 950 */
-  --card: hsl(235, 24%, 19%); /* Navy 900 */
-  --main: hsl(234, 39%, 85%); /* Purple 300 */
-  --muted: hsl(233, 14%, 35%); /* Purple 700 */
-  --border-color: hsl(237, 14%, 26%); /* Purple 800 */
+  /* Assets */
+  --background-img-mobile: url("/bgs/mobile-dark.jpg");
+  --background-img-desktop: url("/bgs/desktop-dark.jpg");
+  /* Semantic Colors (Dark Mode) */
+  --app-bg: hsl(235, 21%, 11%);
+  --surface: hsl(235, 24%, 19%);
+  --txt-primary: hsl(234, 39%, 85%);
+
+  /* FIXED: Lightened this from Purple 700 to Purple 500/Gray for better readability on dark bg */
+  --txt-secondary: hsl(234, 11%, 52%);
+
+  --border: hsl(237, 14%, 26%);
 }
 
 @theme {
+  /* Base Palette References (Optional, if you need raw access) */
   --color-bright-blue: hsl(220, 98%, 61%);
-
-  --color-gray-50: hsl(0, 0%, 98%);
-  --color-gray-300: hsl(233, 11%, 84%);
-  --color-gray-600: hsl(236, 9%, 61%);
-  --color-navy-850: hsl(235, 19%, 35%);
   --color-navy-900: hsl(235, 24%, 19%);
-  --color-navy-950: hsl(235, 21%, 11%);
 
-  /* Purples */
-  --color-purple-100: hsl(236, 33%, 92%);
-  --color-purple-300: hsl(234, 39%, 85%);
-  --color-purple-600: hsl(235, 16%, 43%);
-  --color-purple-700: hsl(233, 14%, 35%);
-  --color-purple-800: hsl(237, 14%, 26%);
+  /* Scalable Utilities 
+     Usage: "bg-app", "bg-surface", "text-primary", "text-secondary", "border-main"
+  */
+  --color-app: var(--app-bg);
+  --color-surface: var(--surface);
+  --color-txt-main: var(--txt-primary);
+  --color-txt-muted: var(--txt-secondary);
+  --color-border-main: var(--border);
+  --color-brand: var(--brand-blue);
 
-  /* Use these for main layout elements */
-  --color-app: var(--app); /* Switches Gray 50 -> Navy 950 */
-  --color-card: var(--card); /* Switches White -> Navy 900 */
-  --color-main: var(--main);
-  --color-muted: var(--muted);
-  --color-border-main: var(--border-color);
   --background-image-custom-gradient: linear-gradient(
     135deg,
     hsl(192, 100%, 67%),
     hsl(280, 87%, 65%)
   );
+
   --font-josefin: "Josefin Sans", sans-serif;
 }
